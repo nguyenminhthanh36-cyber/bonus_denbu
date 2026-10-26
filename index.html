@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bonus &amp; Đền bù Tân Tạo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: thanh điều hướng mỏng phía trên, bên dưới là trang gốc được nhúng nguyên vẹn, giãn theo chiều cao nội dung */
+:root{
+  --bg:#eef1f5; --bar:#ffffff; --line:#d8dee7; --ink:#14213d; --muted:#5b6678;
+  --accent:#1e3a8a; --accent-ink:#ffffff; --chip:#e3e9f4;
+  --font-ui:"Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1220; --bar:#111a2c; --line:#24314a; --ink:#e6ebf4; --muted:#93a0b6;
+    --accent:#93b4ff; --accent-ink:#0b1220; --chip:#1a2540; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1220; --bar:#111a2c; --line:#24314a; --ink:#e6ebf4; --muted:#93a0b6;
+  --accent:#93b4ff; --accent-ink:#0b1220; --chip:#1a2540; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--font-ui)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);border-bottom:1px solid var(--line);
+  padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px}
+.name{display:flex;flex-direction:column;gap:2px;min-width:0}
+.name b{font-size:15px;font-weight:700;letter-spacing:.01em}
+.name span{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:4px;background:var(--chip);padding:4px;border-radius:10px}
+.tab{appearance:none;border:0;background:transparent;color:var(--muted);font:600 13px/1 var(--font-ui);
+  padding:9px 14px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.tab small{font-weight:500;font-size:11px;opacity:.85}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.frames{display:block}
+iframe{display:block;width:100%;border:0;min-height:70vh;background:var(--bg)}
+.loading{padding:40px 16px;text-align:center;color:var(--muted);font-size:13px}
+</style>
+
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <div class="name">
+      <b>Kho Tân Tạo · 2026</b>
+      <span id="note">Bonus BQL · Tháng 1 – Tháng 9</span>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Chọn báo cáo">
+      <button class="tab" id="tab-bonus" role="tab" data-key="bonus" aria-selected="true">Bonus BQL <small>T1–T9</small></button>
+      <button class="tab" id="tab-denbu" role="tab" data-key="denbu" aria-selected="false">Đền bù <small>T1–T9</small></button>
+    </nav>
+  </div>
+</header>
+
+<main class="frames">
+  <iframe id="f-bonus" title="Bonus BQL tháng" data-embed="src-bonus"></iframe>
+  <iframe id="f-denbu" title="Theo dõi đền bù" data-embed="src-denbu" hidden></iframe>
+</main>
+
+
+<!-- ===================== FILE GỐC: BONUS BQL THÁNG =====================
+     Dữ liệu nằm trong phần "const funds", "const monthlyData", "const shares".
+     Lưu ý: các thẻ đóng script trong khối này được viết là <\/script> và chú thích là <\!-- để không làm vỡ trang; giữ nguyên như vậy. -->
+<script type="text/plain" id="src-bonus">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Vận Hành Kho Tân Tạo</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>
+</head>
+<body class="bg-slate-100 text-gray-800 font-sans antialiased text-xs md:text-sm">
+
+    <div class="container mx-auto px-3 py-3 max-w-6xl">
+        
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-300 pb-2 mb-3 gap-2">
+            <div>
+                <h1 class="text-xl font-bold text-blue-950 uppercase tracking-tight">DASHBOARD VẬN HÀNH KHO TÂN TẠO</h1>
+                <p class="text-xs text-slate-500 italic">Tối ưu không gian hiển thị, hạn chế lướt/cuộn màn hình</p>
+            </div>
+            
+            <div class="flex flex-wrap bg-slate-200 p-1 rounded-lg border border-slate-300 shadow-inner gap-1">
+                <button id="btn-compare" onclick="switchTab('compare')" class="px-2.5 py-1.5 rounded-md font-bold text-xs transition-all duration-200 bg-blue-900 text-white shadow-sm cursor-pointer">
+                    📊 Bảng So Sánh Tổng Bonus
+                </button>
+                <button id="btn-detail" onclick="switchTab('detail')" class="px-2.5 py-1.5 rounded-md font-bold text-xs transition-all duration-200 text-slate-700 hover:text-blue-900 cursor-pointer">
+                    📋 Chi Tiết Chỉ Tiêu Từng Tháng
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-compare-content" class="space-y-3">
+            <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-4 py-2 bg-gradient-to-r from-blue-950 to-slate-900 border-b border-slate-200">
+                    <h3 class="font-bold text-white text-xs uppercase tracking-wider">📊 TỔNG HỢP & BIỂU ĐỒ CỘT ĐỨNG BONUS LEADER FINAL CHU KỲ Q1-Q3</h3>
+                </div>
+                
+                <div class="p-4 grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+                    <div class="md:col-span-7 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <p class="text-center text-slate-500 font-bold text-xs mb-4 uppercase tracking-wider">Biểu đồ biến động quỹ thưởng (VNĐ)</p>
+                        <div class="flex items-end justify-between px-4 h-44 border-b border-slate-300 pb-1">
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-blue-700 mb-1">100.6M</span>
+                                <div class="w-10 sm:w-12 bg-blue-600 rounded-t shadow-md" style="height: 100.6px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T1</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-emerald-700 mb-1">75.2M</span>
+                                <div class="w-10 sm:w-12 bg-emerald-500 rounded-t shadow-md" style="height: 75.2px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T2</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-amber-700 mb-1">80.4M</span>
+                                <div class="w-10 sm:w-12 bg-amber-500 rounded-t shadow-md" style="height: 80.4px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T3</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-indigo-700 mb-1">64.8M</span>
+                                <div class="w-10 sm:w-12 bg-indigo-500 rounded-t shadow-md" style="height: 64.8px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T4</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-purple-700 mb-1">54.1M</span>
+                                <div class="w-10 sm:w-12 bg-purple-500 rounded-t shadow-md" style="height: 54.1px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T5</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-rose-700 mb-1">77.8M</span>
+                                <div class="w-10 sm:w-12 bg-rose-500 rounded-t shadow-md" style="height: 77.8px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T6</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-teal-700 mb-1">28.8M</span>
+                                <div class="w-10 sm:w-12 bg-teal-500 rounded-t shadow-md" style="height: 28.8px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T7</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-cyan-700 mb-1">88.8M</span>
+                                <div class="w-10 sm:w-12 bg-cyan-500 rounded-t shadow-md" style="height: 88.8px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T8</span>
+                            </div>
+                            <div class="flex flex-col items-center flex-1">
+                                <span class="text-[10px] font-mono font-bold text-sky-700 mb-1">68.0M</span>
+                                <div class="w-10 sm:w-12 bg-sky-500 rounded-t shadow-md" style="height: 68.0px;"></div>
+                                <span class="text-xs font-bold text-slate-700 mt-1.5">T9</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-5 overflow-hidden border border-slate-200 rounded-lg">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-[11px] font-bold text-slate-600 uppercase border-b border-slate-200">
+                                    <th class="px-3 py-2">Tháng</th>
+                                    <th class="px-3 py-2 text-right">Bonus Final (VNĐ)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-medium text-xs">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-600"></span>Tháng 1</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-blue-700">100.663.665</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Tháng 2</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-emerald-700">75.226.774</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span>Tháng 3</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-amber-700">80.435.800</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-indigo-500"></span>Tháng 4</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-indigo-700">64.873.546</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-500"></span>Tháng 5</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-purple-700">54.159.355</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500"></span>Tháng 6</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-rose-700">77.830.310</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-teal-500"></span>Tháng 7</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-teal-700">28.841.104</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cyan-500"></span>Tháng 8</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-cyan-700">88.830.099</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 font-bold text-slate-900 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-500"></span>Tháng 9</td>
+                                    <td class="px-3 py-2 text-right font-mono font-bold text-sky-700">68.019.802</td>
+                                </tr>
+                                <tr class="bg-slate-100 font-bold border-t border-slate-300">
+                                    <td class="px-3 py-2.5 text-slate-900 uppercase">Tổng Các Tháng</td>
+                                    <td class="px-3 py-2.5 text-right font-mono text-red-700 text-sm">638.880.455</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-4 py-2 bg-slate-800 border-b border-slate-200">
+                    <h3 class="font-bold text-white text-xs uppercase tracking-wider">📋 BẢNG TỔNG HỢP BONUS TỪNG THÁNG CỦA CÁ NHÂN VÀ CỘT TỔNG — SỐ THỰC NHẬN (SAU BÙ TRỪ BQL)</h3>
+                    <p class="text-[10px] text-slate-300 mt-0.5 normal-case">Thực nhận = Thưởng theo tỷ lệ − Bù trừ BQL. Tháng có phiếu PDF lấy đúng số trên phiếu.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[800px]">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold text-[10px] uppercase border-b border-slate-200 text-center">
+                                <th class="px-3 py-2.5 text-left w-[20%] border-r border-slate-200">Họ và Tên</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-blue-900 bg-blue-50/50">Tháng 1</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-emerald-900 bg-emerald-50/50">Tháng 2</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-amber-900 bg-amber-50/50">Tháng 3</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-indigo-900 bg-indigo-50/50">Tháng 4</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-purple-900 bg-purple-50/50">Tháng 5</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-rose-900 bg-rose-50/50">Tháng 6</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-teal-900 bg-teal-50/50">Tháng 7</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-cyan-900 bg-cyan-50/50">Tháng 8</th>
+                                <th class="px-2 py-2.5 border-r border-slate-200 w-[12%] text-sky-900 bg-sky-50/50">Tháng 9</th>
+                                <th class="px-3 py-2.5 text-right w-[20%] bg-amber-100 text-amber-950 font-black">Tổng Các Tháng</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-xs divide-y divide-slate-200 font-medium">
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-3 py-2.5 font-bold text-slate-900 border-r border-slate-200 truncate">1. Nguyễn Minh Thanh</td>
+                                <td id="tab1-p0-t1" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t2" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t3" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t4" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t5" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t6" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t7" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t8" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-t9" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p0-total" class="px-3 py-2.5 text-right font-mono bg-amber-50 font-bold text-blue-950">0</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-3 py-2.5 font-bold text-slate-900 border-r border-slate-200 truncate">2. Đoàn Hiền</td>
+                                <td id="tab1-p1-t1" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t2" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t3" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t4" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t5" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t6" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t7" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t8" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-t9" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p1-total" class="px-3 py-2.5 text-right font-mono bg-amber-50 font-bold text-blue-950">0</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-3 py-2.5 font-bold text-slate-900 border-r border-slate-200 truncate">3. Võ Thị Nhất</td>
+                                <td id="tab1-p2-t1" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t2" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t3" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t4" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t5" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t6" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t7" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t8" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-t9" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p2-total" class="px-3 py-2.5 text-right font-mono bg-amber-50 font-bold text-blue-950">0</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-3 py-2.5 font-bold text-slate-900 border-r border-slate-200 truncate">4. Võ Thị Nhanh</td>
+                                <td id="tab1-p3-t1" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t2" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t3" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t4" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t5" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t6" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t7" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t8" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-t9" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p3-total" class="px-3 py-2.5 text-right font-mono bg-amber-50 font-bold text-blue-950">0</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-3 py-2.5 font-bold text-slate-900 border-r border-slate-200 truncate">5. Nguyễn Lê Tiểu Quyên</td>
+                                <td id="tab1-p4-t1" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t2" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t3" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t4" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t5" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t6" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t7" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t8" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-t9" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-slate-800">0</td>
+                                <td id="tab1-p4-total" class="px-3 py-2.5 text-right font-mono bg-amber-50 font-bold text-blue-950">0</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-slate-100 font-black text-slate-900 text-center border-t border-slate-300">
+                                <td class="px-3 py-2.5 text-left border-r border-slate-200 uppercase tracking-tight text-[11px]">Tổng Thực Nhận</td>
+                                <td id="tab1-sum-t1" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-blue-700">100.663.665</td>
+                                <td id="tab1-sum-t2" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-emerald-700">75.226.774</td>
+                                <td id="tab1-sum-t3" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-amber-700">80.435.800</td>
+                                <td id="tab1-sum-t4" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-indigo-700">64.873.546</td>
+                                <td id="tab1-sum-t5" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-purple-700">54.159.355</td>
+                                <td id="tab1-sum-t6" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-rose-700">77.830.310</td>
+                                <td id="tab1-sum-t7" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-teal-700">28.841.104</td>
+                                <td id="tab1-sum-t8" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-cyan-700">88.830.099</td>
+                                <td id="tab1-sum-t9" class="px-2 py-2.5 text-right font-mono border-r border-slate-200 text-sky-700">68.019.802</td>
+                                <td id="tab1-sum-total" class="px-3 py-2.5 text-right font-mono bg-yellow-100 text-red-700 text-sm">638.880.455</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-detail-content" class="hidden space-y-3 max-w-3xl mx-auto">
+            <div class="flex items-center justify-end gap-2 bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm">
+                <span class="font-bold text-slate-700 text-xs">Xem dữ liệu:</span>
+                <select id="monthSelect" onchange="updateMonthData()" class="bg-blue-50 border border-slate-300 text-blue-950 text-xs rounded px-2 py-1 font-bold cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <option value="1">Tháng 1</option>
+                    <option value="2">Tháng 2</option>
+                    <option value="3">Tháng 3</option>
+                    <option value="4">Tháng 4</option>
+                    <option value="5">Tháng 5</option>
+                    <option value="6">Tháng 6</option>
+                    <option value="7">Tháng 7</option>
+                    <option value="8">Tháng 8</option>
+                    <option value="9">Tháng 9</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div class="bg-white p-2.5 rounded border-l-4 border-blue-600 shadow-sm">
+                    <p class="text-[10px] uppercase font-bold text-slate-400 tracking-tight">Tổng sản lượng</p>
+                    <p id="card-total-prod" class="text-sm font-black text-slate-800 mt-0.5">--</p>
+                </div>
+                <div class="bg-white p-2.5 rounded border-l-4 border-emerald-500 shadow-sm">
+                    <p class="text-[10px] uppercase font-bold text-slate-400 tracking-tight">Tổng quỹ bàn giao</p>
+                    <p id="card-total-delivery" class="text-sm font-black text-slate-800 mt-0.5">--</p>
+                </div>
+                <div class="bg-white p-2.5 rounded border-l-4 border-amber-500 shadow-sm">
+                    <p class="text-[10px] uppercase font-bold text-slate-400 tracking-tight">Lại/Lỗ Thuê ngoài OB</p>
+                    <p id="card-ob-profit" class="text-sm font-black text-slate-800 mt-0.5">--</p>
+                </div>
+                <div class="bg-white p-2.5 rounded border-l-4 border-cyan-500 shadow-sm">
+                    <p class="text-[10px] uppercase font-bold text-slate-400 tracking-tight">Tổng bonus theo tháng</p>
+                    <p id="card-bonus" class="text-sm font-black text-slate-800 mt-0.5">--</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded border border-slate-200 overflow-hidden shadow-sm">
+                <div class="px-3 py-1.5 bg-blue-950 border-b border-slate-200">
+                    <h3 id="table-title" class="font-bold text-white text-xs uppercase tracking-wider">Chi tiết chỉ tiêu tài chính</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-[10px] font-bold text-slate-600 uppercase border-b border-slate-200">
+                                <th class="px-4 py-1.5 w-7/12">Tiêu chí vận hành</th>
+                                <th class="px-4 py-1.5 text-right w-5/12">Tân Tạo (VNĐ)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-body" class="text-xs divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const funds = { t1: 100663665, t2: 75226774, t3: 80435800, t4: 64873546, t5: 54159355, t6: 77830310, t7: 28841104, t8: 88830099, t9: 68019802 };
+
+        const monthlyData = {
+            "1": { name: "Tháng 1", totalProd: "815.196.595", totalDeliveryFund: "56.041.492", obProfit: "38.295.317", bonusFinal: "100.663.665", details: [
+                { label: "Tổng sản lượng", value: "815.196.595", style: "font-bold bg-slate-50 text-blue-955" },
+                { label: "1. Doanh số sản lượng (5%)", value: "40.759.830", style: "font-semibold text-slate-900" },
+                { label: "2. Quỹ bàn giao", value: "9.176.248", style: "font-semibold text-slate-900" },
+                { label: "• Doanh số bàn giao (120đ/ point)", value: "51.730.608", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "• Quản lý bàn giao (10đ/ Point)", value: "4.310.884", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "Tổng quỹ bàn giao", value: "56.041.492", style: "font-bold text-emerald-700 bg-emerald-50/40" },
+                { label: "• Lương Nhân sự bàn giao cố định theo định biên", value: "21.000.000", style: "pl-6 text-slate-600" },
+                { label: "• KPI nhân viên bàn giao", value: "25.865.244", style: "pl-6 text-slate-600" },
+                { label: "Tổng chi phí bàn giao", value: "46.865.244", style: "font-semibold text-slate-700" },
+                { label: "3. Lãi/ Lỗ VAS", value: "12.432.270", style: "font-bold text-blue-600 bg-blue-50/30" },
+                { label: "4. Lãi/Lỗ năng suất thời vụ thuê ngoài OB", value: "38.295.317", style: "font-bold text-amber-600 bg-amber-50/30" },
+                { label: "Tổng bonus theo tháng", value: "100.663.665", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]},
+            "2": { name: "Tháng 2", totalProd: "607.723.336", totalDeliveryFund: "47.386.612", obProfit: "39.330.115", bonusFinal: "75.226.774", details: [
+                { label: "Tổng sản lượng", value: "607.723.336", style: "font-bold bg-slate-50 text-blue-955" },
+                { label: "1. Doanh số sản lượng (5%)", value: "30.386.167", style: "font-semibold text-slate-900" },
+                { label: "Tổng quỹ bàn giao", value: "47.386.612", style: "font-bold text-emerald-700 bg-emerald-50/40" },
+                { label: "3. Lãi/ Lỗ VAS", value: "1.067.920", style: "font-bold text-blue-600 bg-blue-50/30" },
+                { label: "4. Lãi/Lỗ năng suất thời vụ thuê ngoài OB", value: "39.330.115", style: "font-bold text-amber-600 bg-amber-50/30" },
+                { label: "Tổng bonus theo tháng", value: "75.226.774", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]},
+            "3": { name: "Tháng 3", totalProd: "837.419.385", totalDeliveryFund: "56.162.171", obProfit: "39.596.098", bonusFinal: "80.435.800", details: [
+                { label: "Tổng sản lượng", value: "837.419.385", style: "font-bold bg-slate-50 text-blue-955" },
+                { label: "1. Doanh số sản lượng (5%)", value: "41.870.969", style: "font-semibold text-slate-900" },
+                { label: "Tổng quỹ bàn giao", value: "56.162.171", style: "font-bold text-emerald-700 bg-emerald-50/40" },
+                { label: "3. Lãi/ Lỗ VAS", value: "(10.162.090)", style: "font-bold text-red-600 bg-red-50" },
+                { label: "4. Lãi/Lỗ năng suất thời vụ thuê ngoài OB", value: "39.596.098", style: "font-bold text-amber-600 bg-amber-50/30" },
+                { label: "Tổng bonus theo tháng", value: "80.435.800", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]},
+            "4": { name: "Tháng 4", totalProd: "Chờ cập nhật", totalDeliveryFund: "Chờ cập nhật", obProfit: "20.274.638", bonusFinal: "64.873.546", details: [
+                { label: "Tổng sản lượng", value: "Chờ cập nhật", style: "font-bold bg-slate-100 text-slate-400" },
+                { label: "3. Lãi/ Lỗ VAS", value: "10.501.160", style: "font-bold text-blue-600 bg-blue-50/30" },
+                { label: "4. Lãi/Lỗ năng suất thời vụ thuê ngoài OB", value: "20.274.638", style: "font-bold text-amber-600 bg-amber-50/30" },
+                { label: "Tổng bonus theo tháng", value: "64.873.546", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]},
+            "5": { name: "Tháng 5", totalProd: "620.403.400", totalDeliveryFund: "7.306.055", obProfit: "13.314.240", bonusFinal: "54.159.355", details: [
+                { label: "5% KPI Kho", value: "31.020.170", style: "font-semibold text-slate-900" },
+                { label: "KPI bàn giao", value: "7.306.055", style: "font-semibold text-slate-900" },
+                { label: "VAS", value: "2.518.890", style: "font-semibold text-slate-900" },
+                { label: "Lại/ lỗ TV (Thuê ngoài OB)", value: "13.314.240", style: "font-bold text-amber-600 bg-amber-50/30" },
+                { label: "TỔNG QUỸ BONUS", value: "54.159.355", style: "font-black bg-yellow-100 text-purple-950 text-sm" }
+            ]},
+            "6": { name: "Tháng 6", totalProd: "622.910.510", totalDeliveryFund: "5.480.464", obProfit: "7.159.810", bonusFinal: "77.830.310", details: [
+                { label: "Tổng sản lượng (Cơ sở tính KPI Kho)", value: "622.910.510", style: "font-bold bg-slate-50 text-blue-955" },
+                { label: "1. Thưởng KPI Kho (5%)", value: "31.145.526", style: "font-semibold text-slate-900" },
+                { label: "2. Quỹ thưởng bàn giao", value: "5.480.464", style: "font-semibold text-slate-900" },
+                { label: "• Doanh thu bàn giao (136đ/điểm)", value: "49.403.904", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "• Lương nhân viên bàn giao", value: "43.923.440", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "Tổng quỹ bàn giao", value: "5.480.464", style: "font-bold text-emerald-700 bg-emerald-50/40" },
+                { label: "3. Thưởng mùa vụ Inbound", value: "0", style: "font-semibold text-slate-400" },
+                { label: "4. Thưởng mùa vụ Outbound (Lãi/Lỗ TV thuê ngoài OB)", value: "7.159.810", style: "font-bold text-amber-600 bg-amber-50/30" },
+                { label: "5. Thưởng Quản Lý VAS", value: "34.044.510", style: "font-bold text-blue-600 bg-blue-50/30" },
+                { label: "Tổng bonus theo tháng", value: "77.830.310", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]},
+            "7": { name: "Tháng 7", totalProd: "599.154.230", totalDeliveryFund: "1.870.012", obProfit: "(13.749.690)", bonusFinal: "28.841.104", details: [
+                { label: "Tổng sản lượng (Cơ sở tính KPI Kho)", value: "599.154.230", style: "font-bold bg-slate-50 text-blue-955" },
+                { label: "1. Thưởng KPI Kho (5%)", value: "29.957.712", style: "font-semibold text-slate-900" },
+                { label: "2. Quỹ thưởng bàn giao", value: "1.870.012", style: "font-semibold text-slate-900" },
+                { label: "• Doanh thu bàn giao (136đ/điểm)", value: "46.595.232", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "• Lương nhân viên bàn giao", value: "44.725.220", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "Tổng quỹ bàn giao", value: "1.870.012", style: "font-bold text-emerald-700 bg-emerald-50/40" },
+                { label: "3. Thưởng mùa vụ Inbound", value: "0", style: "font-semibold text-slate-400" },
+                { label: "4. Thưởng mùa vụ Outbound (Lãi/Lỗ TV thuê ngoài OB)", value: "(13.749.690)", style: "font-bold text-red-600 bg-red-50" },
+                { label: "5. Thưởng Quản Lý VAS", value: "10.763.070", style: "font-bold text-blue-600 bg-blue-50/30" },
+                { label: "Bù trừ BQL (BOM Compensation)", value: "(201.950)", style: "font-semibold text-red-500" },
+                { label: "Tổng bonus theo tháng", value: "28.841.104", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]},
+            "8": { name: "Tháng 8", totalProd: "707.333.570", totalDeliveryFund: "8.980.300", obProfit: "(4.277.040)", bonusFinal: "88.830.099", details: [
+                { label: "Tổng sản lượng (Cơ sở tính KPI Kho)", value: "707.333.570", style: "font-bold bg-slate-50 text-blue-955" },
+                { label: "1. Thưởng KPI Kho (5%)", value: "35.366.679", style: "font-semibold text-slate-900" },
+                { label: "2. Quỹ thưởng bàn giao", value: "8.980.300", style: "font-semibold text-slate-900" },
+                { label: "• Doanh thu bàn giao (136đ/điểm)", value: "57.309.040", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "• Lương nhân viên bàn giao", value: "48.328.740", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "Tổng quỹ bàn giao", value: "8.980.300", style: "font-bold text-emerald-700 bg-emerald-50/40" },
+                { label: "3. Thưởng mùa vụ Inbound", value: "0", style: "font-semibold text-slate-400" },
+                { label: "4. Thưởng mùa vụ Outbound (Lãi/Lỗ TV thuê ngoài OB)", value: "(4.277.040)", style: "font-bold text-red-600 bg-red-50" },
+                { label: "5. Thưởng Quản Lý VAS", value: "46.240.160", style: "font-bold text-blue-600 bg-blue-50/30" },
+                { label: "Điều chỉnh (CEO)", value: "2.520.000", style: "font-semibold text-emerald-600" },
+                { label: "Tổng bonus theo tháng", value: "88.830.099", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]},
+            "9": { name: "Tháng 9", totalProd: "661.849.460", totalDeliveryFund: "15.659.245", obProfit: "17.033.264", bonusFinal: "68.019.802", details: [
+                { label: "Tổng sản lượng (Cơ sở tính KPI Kho)", value: "661.849.460", style: "font-bold bg-slate-50 text-blue-955" },
+                { label: "1. Thưởng KPI Kho (5%)", value: "33.092.473", style: "font-semibold text-slate-900" },
+                { label: "2. Quỹ thưởng bàn giao", value: "15.659.245", style: "font-semibold text-slate-900" },
+                { label: "• Doanh thu bàn giao (136đ/điểm)", value: "58.491.832", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "• Lương nhân viên bàn giao", value: "42.832.587", style: "pl-6 text-slate-500 italic text-[11px]" },
+                { label: "Tổng quỹ bàn giao", value: "15.659.245", style: "font-bold text-emerald-700 bg-emerald-50/40" },
+                { label: "3. Thưởng mùa vụ Inbound", value: "0", style: "font-semibold text-slate-400" },
+                { label: "4. Thưởng mùa vụ Outbound (Lãi/Lỗ TV thuê ngoài OB)", value: "17.033.264", style: "font-bold text-amber-600 bg-amber-50/30" },
+                { label: "5. Thưởng Quản Lý VAS", value: "2.234.820", style: "font-bold text-blue-600 bg-blue-50/30" },
+                { label: "Bù trừ BQL (BOM Compensation)", value: "(416.100)", style: "font-semibold text-red-500" },
+                { label: "Tổng bonus theo tháng", value: "68.019.802", style: "font-black bg-yellow-100 text-yellow-950 text-sm" }
+            ]}
+        };
+
+        // Hàm chuyển Tab nguyên bản 100% của bạn
+        function switchTab(tabName) {
+            document.getElementById("tab-compare-content").classList.add("hidden");
+            document.getElementById("tab-detail-content").classList.add("hidden");
+
+            document.getElementById("btn-compare").className = "px-2.5 py-1.5 rounded-md font-bold text-xs transition-all duration-200 text-slate-700 hover:text-blue-900 cursor-pointer";
+            document.getElementById("btn-detail").className = "px-2.5 py-1.5 rounded-md font-bold text-xs transition-all duration-200 text-slate-700 hover:text-blue-900 cursor-pointer";
+
+            if (tabName === 'compare') {
+                document.getElementById("tab-compare-content").classList.remove("hidden");
+                document.getElementById("btn-compare").className = "px-2.5 py-1.5 rounded-md font-bold text-xs transition-all duration-200 bg-blue-900 text-white shadow-sm cursor-pointer";
+            } else if (tabName === 'detail') {
+                document.getElementById("tab-detail-content").classList.remove("hidden");
+                document.getElementById("btn-detail").className = "px-2.5 py-1.5 rounded-md font-bold text-xs transition-all duration-200 bg-blue-900 text-white shadow-sm cursor-pointer";
+            }
+        }
+
+        function formatCurrency(number) {
+            return Math.round(number).toLocaleString('vi-VN');
+        }
+
+        // Tỷ lệ chia thưởng cố định từng tháng theo thứ tự nhân sự:
+        // [Nguyễn Minh Thanh, Đoàn Hiền, Võ Thị Nhất, Võ Thị Nhanh, Nguyễn Lê Tiểu Quyên]
+        const shares = {
+            t1: [20, 20, 20, 20, 20],
+            t2: [20, 20, 20, 20, 20],
+            t3: [20, 20, 20, 20, 20],
+            t4: [20, 20, 20, 20, 20],
+            t5: [20, 20, 20, 20, 20],
+            t6: [20, 16, 22, 22, 20],
+            t7: [20, 20, 20, 20, 20],
+            t8: [20, 20, 20, 20, 20],
+            t9: [19, 20, 20.5, 20, 20.5]
+        };
+
+        // Bù trừ BQL (BOM Compensation) từng tháng — trừ vào tiền thưởng cá nhân theo đúng tỷ lệ chia
+        const bomComp = { t7: 201950, t9: 416100 };
+
+        // Số "Tổng nhận" lấy đúng từ phiếu PDF (nếu có) — thứ tự như mảng shares
+        // [Nguyễn Minh Thanh, Đoàn Hiền, Võ Thị Nhất, Võ Thị Nhanh, Nguyễn Lê Tiểu Quyên]
+        const actualPaid = {
+            t9: [12844703.00, 13520740.00, 13858760.34, 13520740.00, 13858759.00]
+        };
+
+        // Hàm tính và đổ số tiền từng người từng tháng lên Bảng Tổng Hợp (Tab 1)
+        function calculateTab1() {
+            const months = ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9'];
+            let personalTotals = [0, 0, 0, 0, 0]; // Lưu tổng cộng 5 người
+
+            months.forEach(m => {
+                const fund = funds[m];
+                const pctList = shares[m];
+
+                let monthSum = 0;
+                pctList.forEach((pct, index) => {
+                    const calculatedAmount = actualPaid[m]
+                        ? actualPaid[m][index]
+                        : (fund * pct) / 100 - ((bomComp[m] || 0) * pct) / 100;
+                    monthSum += calculatedAmount;
+
+                    const tab1Cell = document.getElementById(`tab1-p${index}-${m}`);
+                    if (tab1Cell) {
+                        tab1Cell.innerText = formatCurrency(calculatedAmount);
+                    }
+
+                    personalTotals[index] += calculatedAmount;
+                });
+
+                const sumCell = document.getElementById(`tab1-sum-${m}`);
+                if (sumCell) sumCell.innerText = formatCurrency(monthSum);
+            });
+
+            const grandCell = document.getElementById("tab1-sum-total");
+            if (grandCell) grandCell.innerText = formatCurrency(personalTotals.reduce((a, b) => a + b, 0));
+
+            personalTotals.forEach((total, index) => {
+                const totalCell = document.getElementById(`tab1-p${index}-total`);
+                if (totalCell) {
+                    totalCell.innerText = formatCurrency(total);
+                }
+            });
+        }
+
+        function updateMonthData() {
+            const selectedMonth = document.getElementById("monthSelect").value;
+            const data = monthlyData[selectedMonth];
+
+            document.getElementById("card-total-prod").innerText = data.totalProd;
+            document.getElementById("card-total-delivery").innerText = data.totalDeliveryFund;
+            document.getElementById("card-ob-profit").innerText = data.obProfit;
+            document.getElementById("card-bonus").innerText = data.bonusFinal;
+
+            document.getElementById("table-title").innerText = `Bảng Chi Tiết Chỉ Tiêu Tài Chính - ${data.name}`;
+
+            const tbody = document.getElementById("data-body");
+            tbody.innerHTML = ""; 
+
+            data.details.forEach(item => {
+                const row = document.createElement("tr");
+                row.className = `${item.style} transition-colors hover:bg-slate-50/80`;
+                row.innerHTML = `
+                    <td class="px-4 py-1.5 border-b border-slate-100">${item.label}</td>
+                    <td class="px-4 py-1.5 text-right font-mono border-b border-slate-100">${item.value}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        window.onload = function() {
+            updateMonthData();
+            calculateTab1();
+        };
+    <\/script>
+</body>
+</html>
+</script>
+<!-- ===================== FILE GỐC: THEO DÕI ĐỀN BÙ =====================
+     Dữ liệu nằm trong dòng "const RAW_DATA = [...]". -->
+<script type="text/plain" id="src-denbu">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đền bù kho Tân Tạo năm 2026</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>
+  <style>
+    body { background: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; }
+    .kpi-value { font-size: 1.75rem; font-weight: 700; }
+    .zone-label { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+    .zone-label::after { content: ''; flex: 1; height: 1px; background: #334155; }
+    table { border-collapse: collapse; width: 100%; }
+    thead th { background: #1e3a5f; color: #93c5fd; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 12px; }
+    tbody tr:nth-child(even) { background: #162032; }
+    tbody tr:hover { background: #1e3a5f33; }
+    .page-btn { padding: 4px 10px; border-radius: 6px; background: #334155; color: #94a3b8; margin: 0 2px; font-size: 0.875rem; cursor: pointer; border: none; }
+    .page-btn.active { background: #2563eb; color: #fff; }
+    .month-tab { padding: 6px 16px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: #94a3b8; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.15s; }
+    .month-tab.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .tab-btn { padding: 10px 22px; border-radius: 10px 10px 0 0; border: 1px solid #334155; border-bottom: none; background: #1e293b; color: #64748b; cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: all 0.15s; margin-bottom: -1px; }
+    .tab-btn.active { background: #0f172a; color: #e2e8f0; border-color: #3b82f6; border-bottom: 1px solid #0f172a; }
+    #tab1, #tab2 { padding-top: 1.5rem; }
+    .filter-select { width: 100%; background: #0f172a; border: 1px solid #334155; color: #e2e8f0; border-radius: 8px; padding: 8px 12px; font-size: 0.875rem; outline: none; }
+    .filter-select:focus { border-color: #3b82f6; }
+  </style>
+</head>
+<body class="p-4 md:p-6 max-w-7xl mx-auto">
+
+  <\!-- HEADER -->
+  <div class="mb-8 border-b border-slate-700 pb-5 flex items-start justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-white tracking-wide">Đền Bù Kho Tân Tạo Năm 2026</h1>
+      <p class="text-sm text-slate-400 mt-1">Hệ thống theo dõi dữ liệu bồi thường vật tư tự động · Tháng 1 – Tháng 9</p>
+    </div>
+    <button onclick="exportPDF()" id="btnExportPDF"
+      class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all text-white text-sm font-semibold shadow-lg">
+      📄 Xuất Báo Cáo PDF
+    </button>
+  </div>
+
+  <\!-- TAB NAV -->
+  <div class="border-b border-slate-700 flex gap-0">
+    <button id="tabBtn1" class="tab-btn active" onclick="switchTab(1)">📊 Tổng Quan</button>
+    <button id="tabBtn2" class="tab-btn" onclick="switchTab(2)">🔍 Chi Tiết Theo Tháng</button>
+  </div>
+
+  <div id="tab1">
+  <div class="zone-label">
+    <span class="text-xs font-bold uppercase tracking-widest text-blue-400 bg-blue-500/10 border border-blue-500/30 px-3 py-1 rounded-full">📊 Khu Vực 1 · Tổng Quan Lũy Kế (T1 – T9)</span>
+  </div>
+
+  <\!-- KPI Cards (toàn bộ dữ liệu, không lọc) -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div class="card p-4 flex flex-col justify-between">
+      <span class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Tổng Chi Phí Bồi Thường</span>
+      <span class="kpi-value text-red-400 mt-2" id="kpiTongChiPhi">—</span>
+    </div>
+    <div class="card p-4 flex flex-col justify-between">
+      <span class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Tổng Số Yêu Cầu Phát Sinh</span>
+      <span class="kpi-value text-amber-400 mt-2" id="kpiTongYeuCau">—</span>
+    </div>
+    <div class="card p-4 flex flex-col justify-between">
+      <span class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Tổng Số Nhân Sự Bị Ghi Nhận</span>
+      <span class="kpi-value text-blue-400 mt-2" id="kpiTongNhanSu">—</span>
+    </div>
+  </div>
+
+  <\!-- Charts -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="card p-4 flex flex-col items-center">
+      <h3 class="text-sm font-semibold uppercase text-slate-300 mb-4 self-start">Tỷ trọng chi phí (Loại NS)</h3>
+      <div class="w-full max-w-[220px]"><canvas id="chartPie"></canvas></div>
+    </div>
+    <div class="card p-4 md:col-span-2">
+      <h3 class="text-sm font-semibold uppercase text-slate-300 mb-2">Top 5 nhân sự chi phí cao nhất (lũy kế)</h3>
+      <div class="h-[240px]"><canvas id="chartBar"></canvas></div>
+    </div>
+  </div>
+
+  <\!-- Monthly Breakdown Table -->
+  <div class="card p-4 mb-10 overflow-x-auto">
+    <h3 class="text-sm font-semibold uppercase text-slate-300 mb-4">Bảng phân tích biến động chi phí theo tháng</h3>
+    <table class="text-sm text-left">
+      <thead>
+        <tr>
+          <th>Tháng</th>
+          <th>Số NS phát sinh</th>
+          <th>Tổng chi phí đền bù</th>
+          <th>Tỷ trọng đóng góp</th>
+        </tr>
+      </thead>
+      <tbody id="monthlyTableBody" class="text-slate-300"></tbody>
+    </table>
+  </div>
+
+  <\!-- Dept × Month Breakdown Table -->
+  <div class="card p-4 mb-6 overflow-x-auto" id="deptBreakdownCard">
+    <h3 class="text-sm font-semibold uppercase text-slate-400 mb-4">Tổng đền bù theo Bộ phận qua từng Tháng</h3>
+    <table class="text-sm text-left w-full">
+      <thead>
+        <tr>
+          <th>Bộ phận</th>
+          <th class="text-right">Tháng 1</th>
+          <th class="text-right">Tháng 2</th>
+          <th class="text-right">Tháng 3</th>
+          <th class="text-right">Tháng 4</th>
+          <th class="text-right">Tháng 5</th>
+          <th class="text-right">Tháng 6</th>
+          <th class="text-right">Tháng 7</th>
+          <th class="text-right">Tháng 8</th>
+          <th class="text-right">Tháng 9</th>
+          <th class="text-right text-amber-400">Tổng cộng</th>
+        </tr>
+      </thead>
+      <tbody id="deptTableBody" class="text-slate-300"></tbody>
+    </table>
+  </div>
+
+  </div><\!-- /tab1 -->
+
+  <div id="tab2" class="hidden">
+  <div class="zone-label">
+    <span class="text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">🔍 Khu Vực 2 · Xem Chi Tiết Theo Tháng</span>
+  </div>
+
+  <\!-- Month Tabs -->
+  <div class="flex flex-wrap gap-2 mb-4">
+    <button class="month-tab active" data-month="">Tất cả</button>
+    <button class="month-tab" data-month="m1">Tháng 1</button>
+    <button class="month-tab" data-month="m2">Tháng 2</button>
+    <button class="month-tab" data-month="m3">Tháng 3</button>
+    <button class="month-tab" data-month="m4">Tháng 4</button>
+    <button class="month-tab" data-month="m5">Tháng 5</button>
+    <button class="month-tab" data-month="m6">Tháng 6</button>
+    <button class="month-tab" data-month="m7">Tháng 7</button>
+    <button class="month-tab" data-month="m8">Tháng 8</button>
+    <button class="month-tab" data-month="m9">Tháng 9</button>
+  </div>
+
+  <\!-- Filters for Zone 2 -->
+  <div class="card p-4 mb-6 grid grid-cols-1 sm:grid-cols-4 gap-4">
+    <div>
+      <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Kho</label>
+      <select id="filterKho" class="filter-select">
+        <option value="">Tất cả kho</option>
+        <option value="Boxme T.Tạo">Boxme T.Tạo</option>
+        <option value="Boxme L.Minh Xuân">Boxme L.Minh Xuân</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Bộ phận</label>
+      <select id="filterBoPhan" class="filter-select">
+        <option value="">Tất cả bộ phận</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Loại nhân sự</label>
+      <select id="filterLoai" class="filter-select">
+        <option value="">Tất cả loại</option>
+        <option value="Chính thức">Chính thức</option>
+        <option value="Thời vụ">Thời vụ</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Tìm kiếm nhân sự</label>
+      <input type="text" id="searchBox" placeholder="Nhập tên hoặc mã NV..." class="filter-select" />
+    </div>
+  </div>
+
+  <\!-- Detail Table -->
+  <div class="card p-4">
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <h3 class="text-sm font-semibold uppercase text-slate-300">Danh sách chi tiết nhân sự</h3>
+      <span id="monthBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-700 text-slate-300"></span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="text-sm text-left">
+        <thead>
+          <tr>
+            <th>Mã NV</th>
+            <th>Nhân sự</th>
+            <th>Bộ phận</th>
+            <th>Kho</th>
+            <th>Loại</th>
+            <th id="thYeuCau">Số Y/C</th>
+            <th class="text-right" id="thChiPhi">Tổng Chi Phí</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody" class="text-slate-300"></tbody>
+        <tfoot id="tableFooter"></tfoot>
+      </table>
+    </div>
+    <div class="flex flex-col sm:flex-row justify-between items-center mt-4 pt-4 border-t border-slate-700 gap-4">
+      <span id="tableInfo" class="text-xs text-slate-400"></span>
+      <div class="flex items-center gap-3 flex-wrap">
+        <label class="text-xs text-slate-400 whitespace-nowrap">Dòng/trang:</label>
+        <select id="pageSizeSelect" class="filter-select" style="width:auto">
+          <option value="10" selected>10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+        <div id="pagination" class="flex items-center flex-wrap gap-1"></div>
+      </div>
+    </div>
+  </div>
+
+  </div><\!-- /tab2 -->
+
+<script>
+  const RAW_DATA = [{"dinh_danh":"Võ Thị Nhất","ma":"HCM-0165","bo_phan":"OS","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":216,"chi_phi":5668298,"m1":128610,"m2":655323,"m3":1017765,"m4":364261,"m5":316975,"m6":280429,"m7":1179151,"m8":1719652,"m9":6132},{"dinh_danh":"Phạm Thị Thảo Vy","ma":"HCM-0895","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":1821750,"m1":0,"m2":0,"m3":1765650,"m4":56100,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Quách Minh Quang","ma":"HCM-0791","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":10,"chi_phi":1366753,"m1":15653,"m2":170700,"m3":175000,"m4":353000,"m5":533400,"m6":0,"m7":119000,"m8":0,"m9":0},{"dinh_danh":"Trần Hoàng Anh","ma":"HCM-0426","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":1251261,"m1":30700,"m2":0,"m3":1127099,"m4":0,"m5":0,"m6":0,"m7":0,"m8":93462,"m9":0},{"dinh_danh":"Vũ Kim Bài","ma":"HCM-0466","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":9,"chi_phi":1049163,"m1":63000,"m2":12600,"m3":690000,"m4":245040,"m5":0,"m6":0,"m7":38523,"m8":0,"m9":0},{"dinh_danh":"Vương Hải Đăng","ma":"HCM-0556","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":5,"chi_phi":995140,"m1":929340,"m2":0,"m3":2800,"m4":63000,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Hoài Khương","ma":"HCM-0465","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":53,"chi_phi":1043171,"m1":105610,"m2":46667,"m3":760811,"m4":29861,"m5":4153,"m6":74026,"m7":22043,"m8":0,"m9":0},{"dinh_danh":"Trương Gia Huy","ma":"HCM-0479","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":965626,"m1":105606,"m2":421667,"m3":45839,"m4":22376,"m5":204153,"m6":94423,"m7":53374,"m8":12064,"m9":6124},{"dinh_danh":"Trần Minh Hiếu","ma":"HCM-0673","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":60,"chi_phi":812064,"m1":105610,"m2":421667,"m3":80911,"m4":29861,"m5":4153,"m6":74026,"m7":39465,"m8":37064,"m9":19307},{"dinh_danh":"Võ Phúc Đạt","ma":"HCM-0759","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":12,"chi_phi":741670,"m1":102600,"m2":0,"m3":0,"m4":397800,"m5":113720,"m6":2000,"m7":15000,"m8":0,"m9":110550},{"dinh_danh":"Phạm Tuấn","ma":"HCM-0271","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":776956,"m1":105610,"m2":421667,"m3":45811,"m4":29861,"m5":4145,"m6":74026,"m7":39465,"m8":37064,"m9":19307},{"dinh_danh":"Nguyễn Thế Quang","ma":"HCM-0646","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":776956,"m1":105610,"m2":421667,"m3":45803,"m4":29861,"m5":4153,"m6":74026,"m7":39465,"m8":37064,"m9":19307},{"dinh_danh":"Đoàn Hiền","ma":"HCM-0009","bo_phan":"Leader","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":65,"chi_phi":2087011,"m1":113062,"m2":285797,"m3":157111,"m4":26461,"m5":4153,"m6":193026,"m7":417541,"m8":883728,"m9":6132},{"dinh_danh":"Hà Ngọc Thạch","ma":"HCM-0525","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":867670,"m1":445610,"m2":46667,"m3":45811,"m4":29869,"m5":4153,"m6":94426,"m7":53374,"m8":12064,"m9":135696},{"dinh_danh":"Võ Thị Nhanh","ma":"HCM-0057","bo_phan":"Leader","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":66,"chi_phi":1687924,"m1":105610,"m2":285797,"m3":46811,"m4":125686,"m5":4153,"m6":203526,"m7":39465,"m8":790744,"m9":86132},{"dinh_danh":"Nguyễn Thị Thanh Thúy","ma":"HCM-0896","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":515725,"m1":0,"m2":0,"m3":416500,"m4":99225,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Phan Quốc Hưng","ma":"HCM-0528","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":61,"chi_phi":724564,"m1":105602,"m2":129267,"m3":45819,"m4":29861,"m5":164153,"m6":74026,"m7":39465,"m8":37064,"m9":99307},{"dinh_danh":"Nguyễn Minh Thanh","ma":"HCM-0056","bo_phan":"Leader","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":64,"chi_phi":1412769,"m1":109610,"m2":285797,"m3":45811,"m4":26461,"m5":4153,"m6":74026,"m7":848715,"m8":12064,"m9":6132},{"dinh_danh":"Nguyễn Lê Tiểu Quyên","ma":"HCM-0168","bo_phan":"Leader","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":600519,"m1":106610,"m2":285797,"m3":45811,"m4":26461,"m5":4153,"m6":74026,"m7":39465,"m8":12064,"m9":6132},{"dinh_danh":"Hồ Văn Vạn","ma":"HCM-0781","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":449320,"m1":449320,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Đức Khâm","ma":"HCM-0657","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":10,"chi_phi":792168,"m1":0,"m2":1000,"m3":0,"m4":434170,"m5":0,"m6":112200,"m7":56950,"m8":124848,"m9":63000},{"dinh_danh":"Nguyễn Thị Ngọc Tuyền","ma":"HCM-0233","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":7,"chi_phi":460116,"m1":424463,"m2":0,"m3":0,"m4":0,"m5":0,"m6":1000,"m7":19000,"m8":0,"m9":15653},{"dinh_danh":"Nguyễn Thị Phúc Trâm","ma":"HCM-0779","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":9,"chi_phi":582970,"m1":170550,"m2":1000,"m3":0,"m4":77020,"m5":153000,"m6":70000,"m7":6000,"m8":105400,"m9":0},{"dinh_danh":"Trần Mỹ Âu","ma":"HCM-0948","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":6,"chi_phi":1221273,"m1":0,"m2":0,"m3":0,"m4":210237,"m5":189000,"m6":484925,"m7":207825,"m8":129286,"m9":0},{"dinh_danh":"Nguyễn Thanh Ngân","ma":"HCM-0745","bo_phan":"IS","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":429015,"m1":385815,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":43200,"m9":0},{"dinh_danh":"Huỳnh Khắc Nguyên","ma":"HCM-0418","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":58,"chi_phi":677199,"m1":105606,"m2":46659,"m3":149753,"m4":29858,"m5":4142,"m6":94432,"m7":234685,"m8":12064,"m9":0},{"dinh_danh":"Phạm Lý Duy Thư","ma":"HCM-0184","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":523062,"m1":146812,"m2":183400,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":192850,"m9":0},{"dinh_danh":"Phạm Thị Hiển","ma":"HCM-0805","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":305750,"m1":305750,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Minh Thông","ma":"HCM-0685","bo_phan":"Handover","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":290000,"m1":290000,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Hà Thị Thu Thủy","ma":"HCM-0619","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":387002,"m1":0,"m2":0,"m3":249100,"m4":0,"m5":37902,"m6":0,"m7":100000,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Thanh Ngàn","ma":"HCM-0617","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":60,"chi_phi":449598,"m1":105610,"m2":46667,"m3":92711,"m4":29861,"m5":4153,"m6":99026,"m7":53374,"m8":12064,"m9":6132},{"dinh_danh":"Lê Thị Ngọc Giàu","ma":"HCM-0590","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":257450,"m1":18000,"m2":0,"m3":76560,"m4":162890,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Hữu Tài","ma":"HCM-0530","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":6,"chi_phi":248135,"m1":74835,"m2":69000,"m3":104300,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Phú Ngọc","ma":"HCM-0156","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":58,"chi_phi":401972,"m1":105610,"m2":46667,"m3":45819,"m4":29861,"m5":4153,"m6":74026,"m7":39465,"m8":37064,"m9":19307},{"dinh_danh":"Lê Văn Đoàn","ma":"HCM-0131","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":58,"chi_phi":401964,"m1":105610,"m2":46667,"m3":45811,"m4":29861,"m5":4153,"m6":74026,"m7":39465,"m8":37064,"m9":19307},{"dinh_danh":"Nguyễn Thành Quang","ma":"HCM-0187","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":502714,"m1":105610,"m2":46667,"m3":45811,"m4":29861,"m5":4153,"m6":74026,"m7":39465,"m8":37064,"m9":120057},{"dinh_danh":"Nguyễn Tứ Hải","ma":"HCM-0303","bo_phan":"Controller","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":58,"chi_phi":401964,"m1":105610,"m2":46667,"m3":45811,"m4":29861,"m5":4153,"m6":74026,"m7":39465,"m8":37064,"m9":19307},{"dinh_danh":"Nguyễn Văn Vô","ma":"HCM-0468","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":61,"chi_phi":564157,"m1":105610,"m2":46667,"m3":45811,"m4":29861,"m5":4153,"m6":94435,"m7":75474,"m8":99064,"m9":63082},{"dinh_danh":"Nguyễn Chí Cường","ma":"HCM-0485","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":57,"chi_phi":377698,"m1":105610,"m2":46667,"m3":45811,"m4":29861,"m5":4153,"m6":74026,"m7":53374,"m8":12064,"m9":6132},{"dinh_danh":"Nguyễn Đình Duy","ma":"HCM-0722","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":506098,"m1":105610,"m2":46667,"m3":45811,"m4":29861,"m5":4153,"m6":94426,"m7":53374,"m8":120064,"m9":6132},{"dinh_danh":"Trịnh Quốc Việt","ma":"HCM-0566","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":58,"chi_phi":398072,"m1":105586,"m2":46667,"m3":45819,"m4":29861,"m5":4153,"m6":94416,"m7":53374,"m8":12064,"m9":6132},{"dinh_danh":"Phan Thị Mỹ Ngọc","ma":"HCM-0785","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":59,"chi_phi":673975,"m1":105610,"m2":46667,"m3":45811,"m4":27588,"m5":4153,"m6":254426,"m7":53374,"m8":130214,"m9":6132},{"dinh_danh":"Vũ Thị Thùy Liên","ma":"HCM-0787","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":222700,"m1":164700,"m2":50000,"m3":8000,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Thái Thị Huyền","ma":"HCM-0565","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":211799,"m1":0,"m2":0,"m3":211799,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Lê Văn Sơn","ma":"HCM-0500","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":6,"chi_phi":823250,"m1":118000,"m2":0,"m3":0,"m4":38250,"m5":51100,"m6":0,"m7":173400,"m8":442500,"m9":0},{"dinh_danh":"Nguyễn Văn Hiến","ma":"HCM-0262","bo_phan":"Leader","kho":"Boxme L.Minh Xuân","loai":"Chính thức","yeu_cau":28,"chi_phi":198088,"m1":105610,"m2":46667,"m3":45811,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Hùng Bảo Quân","ma":"HCM-0796","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":194000,"m1":0,"m2":137900,"m3":0,"m4":56100,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Thái Hồng Sơn","ma":"HCM-0546","bo_phan":"Receiver","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":187500,"m1":187500,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Trần Nguyễn Trà My","ma":"","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Thời vụ","yeu_cau":1,"chi_phi":169000,"m1":169000,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Phạm Thị Thanh Quí","ma":"","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Thời vụ","yeu_cau":1,"chi_phi":161920,"m1":0,"m2":161920,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Trịnh Duy Lâm","ma":"HCM-0394","bo_phan":"Handover","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":190340,"m1":0,"m2":0,"m3":0,"m4":154000,"m5":0,"m6":0,"m7":0,"m8":36340,"m9":0},{"dinh_danh":"Neáng Bunh Ny","ma":"HCM-0748","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":5,"chi_phi":153750,"m1":117000,"m2":0,"m3":18000,"m4":0,"m5":0,"m6":18750,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Bùi Ngọc Đức","ma":"HCM-0793","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":124848,"m1":124848,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Trần Thị Minh Thư","ma":"HCM-0380","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":104300,"m1":0,"m2":0,"m3":104300,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Anh Thư","ma":"HCM-0415","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":75940,"m1":51100,"m2":24840,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"NGUYỄN THỊ NGỌC YẾN","ma":"","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Thời vụ","yeu_cau":1,"chi_phi":59000,"m1":59000,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Tấn An","ma":"HCM-0648","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":56950,"m1":56950,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Thị Lê","ma":"HCM-0955","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":78676,"m1":0,"m2":0,"m3":0,"m4":0,"m5":52000,"m6":0,"m7":0,"m8":26676,"m9":0},{"dinh_danh":"Ngô Thị Vy","ma":"HCM-0708","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":51100,"m1":0,"m2":0,"m3":0,"m4":0,"m5":51100,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"phạm nguyễn thiên thanh","ma":"","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Thời vụ","yeu_cau":1,"chi_phi":48750,"m1":0,"m2":48750,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Ngọc Bích Trân","ma":"HCM-0904","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":46560,"m1":0,"m2":0,"m3":46560,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Lê Phạm Anh","ma":"HCM-0792","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":611868,"m1":34008,"m2":0,"m3":0,"m4":0,"m5":1000,"m6":0,"m7":167000,"m8":409860,"m9":0},{"dinh_danh":"Nguyễn Đỗ Minh Tuấn","ma":"HCM-0891","bo_phan":"Receiver","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":34128,"m1":0,"m2":0,"m3":0,"m4":34128,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Đức Trung","ma":"HCM-0712","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":213558,"m1":31305,"m2":0,"m3":0,"m4":0,"m5":0,"m6":166600,"m7":0,"m8":0,"m9":15653},{"dinh_danh":"Trần Thị Hồng Thủy","ma":"HCM-0073","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":2000,"m1":2000,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Tạ Thị Kim Oanh","ma":"","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Thời vụ","yeu_cau":2,"chi_phi":0,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":0},{"dinh_danh":"Trần Minh Hải","ma":"HCM-0914","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":11,"chi_phi":82936,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":24400,"m7":40332,"m8":12064,"m9":6140},{"dinh_danh":"Nguyễn Thành Danh","ma":"HCM-0916","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":13,"chi_phi":161158,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":24400,"m7":40312,"m8":35014,"m9":61432},{"dinh_danh":"Huỳnh Anh Thư","ma":"HCM-0953","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":2715530,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":2391050,"m7":6000,"m8":318480,"m9":0},{"dinh_danh":"Nguyễn Văn Giàu","ma":"HCM-0974","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":205400,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":93200,"m7":112200,"m8":0,"m9":0},{"dinh_danh":"Huỳnh Thị Yến Nhi","ma":"HCM-0952","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":20000,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":20000,"m8":0,"m9":0},{"dinh_danh":"Lê Thị Bích Quyên","ma":"HCM-1002","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":4,"chi_phi":284950,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":61200,"m8":113200,"m9":110550},{"dinh_danh":"Võ Hồ Mỹ Như","ma":"HCM-1014","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":68500,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":12000,"m8":56500,"m9":0},{"dinh_danh":"Lộc Thế Mạnh","ma":"HCM-1021","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":9000,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":9000,"m8":0,"m9":0},{"dinh_danh":"Lưu Đức Hòa","ma":"HCM-1034","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":6000,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":6000,"m8":0,"m9":0},{"dinh_danh":"Nguyễn Trường Khang","ma":"HCM-1072","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":108500,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":108500,"m8":0,"m9":0},{"dinh_danh":"Bùi Minh Hưng","ma":"HCM-0270","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":1000,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":1000,"m9":0},{"dinh_danh":"Lê Thị Thu Ngân","ma":"HCM-0650","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":108000,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":108000,"m9":0},{"dinh_danh":"Nguyễn Hoàng Phúc","ma":"HCM-0970","bo_phan":"Picker","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":12074,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":12074,"m9":0},{"dinh_danh":"Thạch Văn Trương","ma":"HCM-1008","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":54900,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":54900,"m9":0},{"dinh_danh":"Nguyễn Anh Thư","ma":"HCM-1064","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":2,"chi_phi":260000,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":231000,"m9":29000},{"dinh_danh":"Trần Hoàng Nhứt","ma":"HCM-1070","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":3,"chi_phi":1866000,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":1866000,"m9":0},{"dinh_danh":"Phan Văn Chí Dủy","ma":"HCM-1135","bo_phan":"Packer","kho":"Boxme T.Tạo","loai":"Chính thức","yeu_cau":1,"chi_phi":212820,"m1":0,"m2":0,"m3":0,"m4":0,"m5":0,"m6":0,"m7":0,"m8":0,"m9":212820}];
+
+  let PAGE_SIZE = 10;
+  let currentPage = 1;
+  let selectedMonth = '';   // \'\' = tất cả, \'m1\'–\'m5\' = tháng cụ thể
+  let pieChartInstance = null;
+  let barChartInstance = null;
+
+  function switchTab(n) {
+    document.getElementById('tab1').classList.toggle('hidden', n !== 1);
+    document.getElementById('tab2').classList.toggle('hidden', n !== 2);
+    document.getElementById('tabBtn1').classList.toggle('active', n === 1);
+    document.getElementById('tabBtn2').classList.toggle('active', n === 2);
+  }
+
+  const MONTH_LABELS = { m1: 'Tháng 1', m2: 'Tháng 2', m3: 'Tháng 3', m4: 'Tháng 4', m5: 'Tháng 5', m6: 'Tháng 6', m7: 'Tháng 7', m8: 'Tháng 8', m9: 'Tháng 9' };
+
+  // ── ZONE 1: render với toàn bộ RAW_DATA ──────────────────────────
+  function renderOverview() {
+    const data = RAW_DATA;
+    // KPI
+    document.getElementById('kpiTongChiPhi').textContent  = data.reduce((s,d)=>s+d.chi_phi,0).toLocaleString('vi-VN') + 'đ';
+    document.getElementById('kpiTongYeuCau').textContent  = data.reduce((s,d)=>s+d.yeu_cau,0).toLocaleString('vi-VN');
+    document.getElementById('kpiTongNhanSu').textContent  = data.length + ' người';
+    // Pie
+    const ctx1 = document.getElementById('chartPie').getContext('2d');
+    if (pieChartInstance) pieChartInstance.destroy();
+    const ctCost = data.filter(d=>d.loai==='Chính thức').reduce((s,d)=>s+d.chi_phi,0);
+    const tvCost = data.filter(d=>d.loai==='Thời vụ').reduce((s,d)=>s+d.chi_phi,0);
+    pieChartInstance = new Chart(ctx1, {
+      type: 'pie',
+      data: { labels: ['Chính thức','Thời vụ'], datasets: [{ data: [ctCost, tvCost], backgroundColor: ['#2563eb','#d97706'], borderWidth: 2 }] },
+      options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } },
+        tooltip: { callbacks: { label: c => ' ' + c.label + ': ' + c.raw.toLocaleString('vi-VN') + 'đ' } } } }
+    });
+    // Bar
+    const ctx2 = document.getElementById('chartBar').getContext('2d');
+    if (barChartInstance) barChartInstance.destroy();
+    const top5 = [...data].sort((a,b)=>b.chi_phi-a.chi_phi).slice(0,5);
+    barChartInstance = new Chart(ctx2, {
+      type: 'bar',
+      data: { labels: top5.map(d=>d.dinh_danh), datasets: [{ label: 'Chi phí', data: top5.map(d=>d.chi_phi), backgroundColor: '#ef4444', borderRadius: 6 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.raw.toLocaleString('vi-VN') + 'đ' } } },
+        scales: {
+          x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => (v/1000000).toFixed(1)+'M' } },
+          y: { grid: { display: false }, ticks: { color: '#e2e8f0', font: { size: 11 } } }
+        }
+      }
+    });
+    // Monthly breakdown
+    const months = ['m1','m2','m3','m4','m5','m6','m7','m8','m9'];
+    const totalAll = data.reduce((s,d)=>s+d.chi_phi,0);
+    const tbody = document.getElementById('monthlyTableBody');
+    tbody.innerHTML = '';
+    months.forEach(mk => {
+      const staffCount = data.filter(d => d[mk] > 0).length;
+      const totalMonth = data.reduce((s,d)=>s+(d[mk]||0),0);
+      const pct = totalAll > 0 ? ((totalMonth/totalAll)*100).toFixed(1) : '0.0';
+      let badge = 'bg-slate-700 text-slate-300';
+      if (pct > 30) badge = 'bg-red-500/20 text-red-400 border border-red-500/30';
+      else if (pct > 10) badge = 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
+      else if (pct > 0)  badge = 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-700/50 h-11';
+      tr.innerHTML = `
+        <td class="px-3 font-medium text-white">${MONTH_LABELS[mk]}</td>
+        <td class="px-3 text-blue-400 font-semibold">${staffCount} nhân sự</td>
+        <td class="px-3 font-semibold text-slate-200">${totalMonth.toLocaleString('vi-VN')}đ</td>
+        <td class="px-3"><span class="px-2 py-0.5 rounded text-xs font-bold ${badge}">${pct}%</span></td>`;
+      tbody.appendChild(tr);
+    });
+    // Dept breakdown
+    renderDeptTable();
+  }
+
+  // ── DEPT BREAKDOWN TABLE ──────────────────────────────────────────
+  function renderDeptTable() {
+    const data  = RAW_DATA;
+    const months = ['m1','m2','m3','m4','m5','m6','m7','m8','m9'];
+    const depts  = [...new Set(data.map(d=>d.bo_phan))].sort();
+    const tbody  = document.getElementById('deptTableBody');
+    tbody.innerHTML = '';
+    let colTotals = [0,0,0,0,0,0,0,0,0,0];
+    depts.forEach(bp => {
+      const rows = data.filter(d=>d.bo_phan===bp);
+      const vals = months.map(mk => rows.reduce((s,d)=>s+(d[mk]||0),0));
+      const rowSum = vals.reduce((s,v)=>s+v,0);
+      vals.forEach((v,i)=>{ colTotals[i]+=v; });
+      colTotals[9] += rowSum;
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-700/50 h-10';
+      tr.innerHTML = `
+        <td class="px-3 font-medium text-white">${bp}</td>
+        ${vals.map(v=>
+          `<td class="px-3 text-right font-semibold ${v>0?'text-slate-200':'text-slate-600'}">${v>0?v.toLocaleString('vi-VN')+'đ':'—'}</td>`
+        ).join('')}
+        <td class="px-3 text-right font-bold text-amber-400">${rowSum.toLocaleString('vi-VN')}đ</td>`;
+      tbody.appendChild(tr);
+    });
+    // Footer totals row
+    const tf = document.createElement('tr');
+    tf.className = 'border-t-2 border-slate-500 bg-slate-800/50 font-bold';
+    tf.innerHTML = `
+      <td class="px-3 text-slate-300 uppercase text-xs">Tổng tất cả</td>
+      ${colTotals.slice(0,9).map(v=>
+        `<td class="px-3 text-right text-slate-200">${v>0?v.toLocaleString('vi-VN')+'đ':'—'}</td>`
+      ).join('')}
+      <td class="px-3 text-right text-amber-400">${colTotals[9].toLocaleString('vi-VN')}đ</td>`;
+    tbody.appendChild(tf);
+  }
+
+  // ── ZONE 2: filter + table ────────────────────────────────────────
+  function updateBoPhanFilter() {
+    const khoVal  = document.getElementById('filterKho').value;
+    const bpSel   = document.getElementById('filterBoPhan');
+    const savedBp = bpSel.value;
+    const base    = khoVal ? RAW_DATA.filter(d=>d.kho===khoVal) : RAW_DATA;
+    const uniq    = [...new Set(base.map(d=>d.bo_phan))].sort();
+    bpSel.innerHTML = '<option value="">Tất cả bộ phận</option>';
+    uniq.forEach(bp => {
+      const opt = document.createElement('option');
+      opt.value = bp; opt.textContent = bp;
+      if (bp === savedBp) opt.selected = true;
+      bpSel.appendChild(opt);
+    });
+    if (savedBp && !uniq.includes(savedBp)) bpSel.value = '';
+  }
+
+  function getFiltered() {
+    const kho    = document.getElementById('filterKho').value;
+    const boPhan = document.getElementById('filterBoPhan').value;
+    const loai   = document.getElementById('filterLoai').value;
+    const search = document.getElementById('searchBox').value.toLowerCase().trim();
+    return RAW_DATA.filter(d => {
+      if (kho    && d.kho     !== kho)    return false;
+      if (boPhan && d.bo_phan !== boPhan) return false;
+      if (loai   && d.loai   !== loai)    return false;
+      if (search && !d.dinh_danh.toLowerCase().includes(search) && !d.ma.toLowerCase().includes(search)) return false;
+      // Nếu đang xem tháng cụ thể, chỉ giữ người có phát sinh trong tháng đó
+      if (selectedMonth && !(d[selectedMonth] > 0)) return false;
+      return true;
+    });
+  }
+
+  function renderDetail() {
+    const data = getFiltered();
+    // Cập nhật badge tháng và header cột
+    const monthLabel = selectedMonth ? MONTH_LABELS[selectedMonth] : 'Tất cả tháng';
+    document.getElementById('monthBadge').textContent = '📅 ' + monthLabel;
+    document.getElementById('thChiPhi').textContent   = selectedMonth ? ('Chi Phí ' + MONTH_LABELS[selectedMonth]) : 'Tổng Chi Phí';
+    document.getElementById('thYeuCau').textContent   = selectedMonth ? 'Y/C (lũy kế)' : 'Số Y/C';
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    const start    = (currentPage - 1) * PAGE_SIZE;
+    const pageData = data.slice(start, start + PAGE_SIZE);
+    pageData.forEach(d => {
+      const maHidden  = d.loai === 'Thời vụ' ? '(Thời vụ)' : (d.ma.slice(0,-3) + '***');
+      const chiPhiVal = selectedMonth ? d[selectedMonth] : d.chi_phi;
+      const tr = document.createElement('tr');
+      tr.className = 'border-b border-slate-700/50 h-11';
+      tr.innerHTML = `
+        <td class="px-3 font-mono text-xs text-slate-400">${maHidden}</td>
+        <td class="px-3 font-medium text-white">${d.dinh_danh}</td>
+        <td class="px-3 text-slate-300">${d.bo_phan}</td>
+        <td class="px-3 text-slate-400 text-xs">${d.kho}</td>
+        <td class="px-3"><span class="px-2 py-0.5 rounded text-xs font-semibold ${d.loai==='Chính thức'?'bg-blue-500/20 text-blue-400':'bg-amber-500/20 text-amber-400'}">${d.loai}</span></td>
+        <td class="px-3 text-slate-300 font-semibold">${d.yeu_cau}</td>
+        <td class="px-3 text-right font-semibold text-red-400">${chiPhiVal.toLocaleString('vi-VN')}đ</td>`;
+      tbody.appendChild(tr);
+    });
+    // Tfoot — Tổng cộng chi phí (theo filter đang active)
+    const tfoot = document.getElementById('tableFooter');
+    if (tfoot) {
+      const totalChiPhi = data.reduce((s,d) => s + (selectedMonth ? (d[selectedMonth]||0) : d.chi_phi), 0);
+      const totalYeuCau = data.reduce((s,d) => s + d.yeu_cau, 0);
+      tfoot.innerHTML = `
+        <tr class="border-t-2 border-slate-500 bg-slate-800/60 font-bold text-sm">
+          <td class="px-3 text-slate-400 text-xs uppercase py-2" colspan="2">Tổng cộng (${data.length} nhân sự)</td>
+          <td class="px-3" colspan="2"></td>
+          <td class="px-3"></td>
+          <td class="px-3 font-bold text-slate-200">${totalYeuCau.toLocaleString('vi-VN')}</td>
+          <td class="px-3 text-right font-bold text-amber-400">${totalChiPhi.toLocaleString('vi-VN')}đ</td>
+        </tr>`;
+    }
+
+    const totalPages = Math.ceil(data.length / PAGE_SIZE);
+    document.getElementById('tableInfo').textContent = data.length > 0
+      ? `Hiển thị ${start+1}–${Math.min(start+PAGE_SIZE,data.length)} / ${data.length} nhân sự`
+      : 'Không tìm thấy nhân sự phù hợp';
+    const pg = document.getElementById('pagination');
+    pg.innerHTML = '';
+    for (let p = 1; p <= totalPages; p++) {
+      const btn = document.createElement('button');
+      btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
+      btn.textContent = p;
+      btn.onclick = () => { currentPage = p; renderDetail(); };
+      pg.appendChild(btn);
+    }
+  }
+
+  // ── INIT ─────────────────────────────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    renderOverview();
+    updateBoPhanFilter();
+    renderDetail();
+
+    document.getElementById('pageSizeSelect').addEventListener('change', function() {
+      PAGE_SIZE = parseInt(this.value);
+      currentPage = 1;
+      renderDetail();
+    });
+
+    // Month tabs
+    document.querySelectorAll('.month-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.month-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedMonth = btn.dataset.month;
+        currentPage = 1;
+        renderDetail();
+      });
+    });
+
+    // Zone 2 filters
+    document.getElementById('filterKho').addEventListener('change', () => {
+      updateBoPhanFilter(); currentPage = 1; renderDetail();
+    });
+    ['filterBoPhan','filterLoai'].forEach(id =>
+      document.getElementById(id).addEventListener('change', () => { currentPage = 1; renderDetail(); })
+    );
+    let searchTimer;
+    document.getElementById('searchBox').addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => { currentPage = 1; renderDetail(); }, 200);
+    });
+  });
+  // ── EXPORT PDF ───────────────────────────────────────────────────────
+  function exportPDF() {
+    const btn = document.getElementById('btnExportPDF');
+    btn.disabled = true;
+    btn.textContent = '⏳ Đang xuất...';
+
+    const opt = {
+      margin:      10,
+      filename:    'Bao_cao_den_bu_kho_Tan_Tao_2026.pdf',
+      image:       { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0f172a', logging: false },
+      jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak:   { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    // Clone body, temporarily expand all tables (remove pagination limits)
+    const element = document.body.cloneNode(true);
+    element.style.background = '#0f172a';
+
+    html2pdf().set(opt).from(element).save()
+      .then(() => {
+        btn.disabled = false;
+        btn.textContent = '📄 Xuất Báo Cáo PDF';
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = '📄 Xuất Báo Cáo PDF';
+      });
+  }
+
+<\/script>
+</body>
+</html>
+</script>
+<script>
+/* Mỗi báo cáo là một file gốc riêng (bonus.html, den-bu.html), nhúng nguyên vẹn.
+   Cập nhật dữ liệu: chỉ thay file tương ứng, trang này không cần sửa. */
+const NOTES = { bonus: "Bonus BQL · Tháng 1 – Tháng 9", denbu: "Đền bù vật tư · Tháng 1 – Tháng 9" };
+const tabs = [...document.querySelectorAll(".tab")];
+
+function fit(f){
+  try{
+    const d = f.contentDocument; if(!d || !d.body) return;
+    const cs = f.contentWindow.getComputedStyle(d.body);
+    const h = Math.ceil(d.body.getBoundingClientRect().height + parseFloat(cs.marginTop||0) + parseFloat(cs.marginBottom||0));
+    if(h > 50 && Math.abs(h - f.offsetHeight) > 2) f.style.height = h + "px";
+  }catch(e){ f.style.height = "calc(100vh - 70px)"; }
+}
+
+function load(f){
+  if(f.dataset.loaded) return; f.dataset.loaded = "1";
+  f.addEventListener("load", () => {
+    fit(f);
+    try{
+      const RO = f.contentWindow.ResizeObserver;
+      if(RO) new RO(() => fit(f)).observe(f.contentDocument.body);
+    }catch(e){}
+    setInterval(() => { if(!f.hidden) fit(f); }, 800);
+  });
+  const raw = document.getElementById(f.dataset.embed).textContent;
+  f.srcdoc = raw.replace(/<\\\/script/gi, "<\/script").replace(/<\\!--/g, "<!--");
+}
+
+function show(key){
+  tabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.key === key)));
+  const fb = document.getElementById("f-bonus"), fd = document.getElementById("f-denbu");
+  fb.hidden = key !== "bonus"; fd.hidden = key !== "denbu";
+  const cur = key === "bonus" ? fb : fd;
+  load(cur);                     // nạp khi tab được mở lần đầu, để biểu đồ vẽ đúng kích thước
+  fit(cur);
+  document.getElementById("note").textContent = NOTES[key];
+  try{ localStorage.setItem("kho-tt-tab", key); }catch(e){}
+  window.scrollTo(0, 0);
+}
+
+tabs.forEach(t => t.addEventListener("click", () => show(t.dataset.key)));
+let start = (location.hash || "").replace("#","");
+if(!NOTES[start]){ try{ start = localStorage.getItem("kho-tt-tab") || "bonus"; }catch(e){ start = "bonus"; } }
+if(!NOTES[start]) start = "bonus";
+show(start);
+</script>
+
+</body>
+</html>
